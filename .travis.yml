@@ -1,8 +1,5 @@
 
-language: groovy
+language: java
 
-before_script:
- - chmod +x grailsw
-
-script: ./grailsw refresh-dependencies &&
-        ./grailsw check
+before_install:
+ - chmod +x gradlew
