@@ -9,4 +9,7 @@
 .gradle
 gradlew.bat
 build/
+classes
 
+### OSX
+.DS_Store
