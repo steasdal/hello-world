@@ -32,40 +32,32 @@ Build a deployable war file:
 
     gradle war
     
-Build a Docker image for the "thick" jar with embedded tomcat (based on the java:8 image)
+Build a Docker image for the deployable war file (based on the tomcat:8.0 image)
 
-    gradle buildDockerThick
-    
-Build a Docker image for the war (based on the tomcat:8.0 image)
-
-    gradle buildDockerThin
+    gradle buildDocker
     
 ## Running the service
 To run the service from gradle, simply execute the bootRun command:
 
     gradle bootRun
     
-To run the thick jar version of the service from Docker (after executing the `buildDockerThick` target), run the following command:
-
-    docker run -p 8080:8080 -d steasdal/hello-world-thick
+To run the docker image (after executing the `buildDocker` target), run the following command:
     
-To run the thin version of the service from Docker (after executing the `buildDockerThin` target), run the following command:
-
-    docker run -p 8080:8080 -d steasdal/hello-world-thin
+    docker run -p 8080:8080 -d steasdal/hello-world
     
-Running this Docker image will fire up the WAR in an instance of Tomcat.  The root URL will be as follows:
+Running this Docker image will fire up the WAR in a Dockerized instance of Tomcat.  The root URL will be as follows:
 
-   * `http://localhost:8080/hello-world/` - (substitute this for the base url of the endpoints in the next section if you're running this Docker target).
+   * `http://localhost:8080/hello-world/`
     
 ## Using the service
 Once the service is up and running, fire up Curl or your favorite REST browser (e.g. Postman) and hit the following endpoints:
 
-   * [http://localhost:8080/hello](http://localhost:8080/hello) - returns a "hello world" style greeting as a bit of JSON
-   * [http://localhost:8080/health](http://localhost:8080/health) - returns a bit of JSON that describes the current of health of this service (provided by the Spring Boot Actuator)
-   * [http://localhost:8080/person](http://localhost:8080/person) - create or browse Person records
+   * [http://localhost:8080/hello-world/hello](http://localhost:8080/hello-world/hello) - returns a "hello world" style greeting as a bit of JSON
+   * [http://localhost:8080/hello-world/health](http://localhost:8080/hello-world/health) - returns a bit of JSON that describes the current of health of this service (provided by the Spring Boot Actuator)
+   * [http://localhost:8080/hello-world/person](http://localhost:8080/hello-world/person) - create or browse Person records
       * POST to create a new person.
          * set Content-Type header to `application/json`
          * set the request body thusly: `{"name":"joe", "age":47}`
       * GET to retrieve a list of all people
       * GET with /{personId} to retrieve info on a particular Person
-   * [http://localhost:8080/swagger](http://localhost:8080/swagger) - display live swagger API documentation (use your regular ol' browser for this)
+   * [http://localhost:8080/hello-world/swagger](http://localhost:8080/hello-world/swagger) - display live swagger API documentation (use your regular ol' browser for this)

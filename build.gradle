@@ -46,22 +46,10 @@ dependencies {
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
 }
 
-task buildDockerThick(type: Docker, dependsOn: build) {
+task buildDocker(type: Docker, dependsOn: war) {
     push = false
-    applicationName = "${rootProject.name}-thick"
-    dockerfile = file('src/main/docker/DockerFileThick')
-    doFirst {
-        copy {
-            from jar
-            into stageDir
-        }
-    }
-}
-
-task buildDockerThin(type: Docker, dependsOn: war) {
-    push = false
-    applicationName = "${rootProject.name}-thin"
-    dockerfile = file('src/main/docker/DockerFileThin')
+    applicationName = "${rootProject.name}"
+    dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
             from war
