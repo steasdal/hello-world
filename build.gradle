@@ -1,0 +1,71 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE")
+        classpath("se.transmode.gradle:gradle-docker:1.2")
+    }
+}
+
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'groovy'
+apply plugin: 'war'
+apply plugin: "spring-boot"
+apply plugin: 'docker'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+def springbootVersion = "1.2.6.RELEASE"
+def swaggerVersion = "2.0.0"
+
+group = "steasdal"
+
+dependencies {
+    compile "org.codehaus.groovy:groovy-all:2.4.3"
+    compile "org.springframework.boot:spring-boot-starter-web:${springbootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-actuator:${springbootVersion}"
+    compile "org.springframework.boot:spring-boot-starter-jdbc:${springbootVersion}"
+    compile "org.grails:gorm-hibernate4-spring-boot:1.1.0.RELEASE"
+    compile "com.h2database:h2"
+    compile "org.slf4j:slf4j-api:1.7.12"
+    compile "org.springframework.hateoas:spring-hateoas:0.17.0.RELEASE"
+    compile "io.springfox:springfox-swagger2:${swaggerVersion}"
+    compile "io.springfox:springfox-swagger-ui:${swaggerVersion}"
+
+    testCompile 'junit:junit:4.12'
+    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
+    testCompile "org.spockframework:spock-spring:0.7-groovy-2.0"
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile "cglib:cglib-nodep:3.1"
+
+    providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
+}
+
+task buildDockerThick(type: Docker, dependsOn: build) {
+    push = false
+    applicationName = "${rootProject.name}-thick"
+    dockerfile = file('src/main/docker/DockerFileThick')
+    doFirst {
+        copy {
+            from jar
+            into stageDir
+        }
+    }
+}
+
+task buildDockerThin(type: Docker, dependsOn: war) {
+    push = false
+    applicationName = "${rootProject.name}-thin"
+    dockerfile = file('src/main/docker/DockerFileThin')
+    doFirst {
+        copy {
+            from war
+            into stageDir
+        }
+    }
+}
