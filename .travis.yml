@@ -1,5 +1,15 @@
 
+sudo: required
+
 language: java
 
+services:
+  - docker
+
 before_install:
- - chmod +x gradlew
+  - chmod +x gradlew
+
+script:
+  - ./gradlew clean buildDocker
+  - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+  - docker push steasdal/hello-world
