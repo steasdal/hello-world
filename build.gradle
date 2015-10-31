@@ -23,8 +23,6 @@ repositories {
 def springbootVersion = "1.2.6.RELEASE"
 def swaggerVersion = "2.0.0"
 
-group = "steasdal"
-
 dependencies {
     compile "org.codehaus.groovy:groovy-all:2.4.3"
     compile "org.springframework.boot:spring-boot-starter-web:${springbootVersion}"
@@ -46,9 +44,22 @@ dependencies {
     providedRuntime "org.springframework.boot:spring-boot-starter-tomcat"
 }
 
+group = "steasdal"
+mainClassName = 'com.teasdale.Application'
+
 task buildDocker(type: Docker, dependsOn: war) {
     push = false
-    applicationName = "${rootProject.name}"
+    dockerfile = file('src/main/docker/Dockerfile')
+    doFirst {
+        copy {
+            from war
+            into stageDir
+        }
+    }
+}
+
+task buildDockerPush(type: Docker, dependsOn: war) {
+    push = true
     dockerfile = file('src/main/docker/Dockerfile')
     doFirst {
         copy {
