@@ -45,6 +45,7 @@ dependencies {
 }
 
 group = "steasdal"
+mainClassName = 'com.teasdale.Application'
 
 task buildDocker(type: Docker, dependsOn: war) {
     push = false
