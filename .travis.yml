@@ -10,7 +10,7 @@ before_install:
   - chmod +x gradlew
 
 script:
-  - ./gradlew clean buildDocker
+  - ./gradlew clean dockerPrep
   - docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
-  - docker push steasdal/hello-world
-  - docker rmi steasdal/hello-world
+  - docker build
+  - docker images
