@@ -49,20 +49,11 @@ dependencies {
 task buildDocker(type: Docker, dependsOn: war) {
     push = false
     applicationName = "${rootProject.name}"
-    dockerfile = file('src/main/docker/Dockerfile')
+    dockerfile = file('Dockerfile')
     doFirst {
         copy {
             from war
             into stageDir
-        }
-    }
-}
-
-task dockerPrep(dependsOn: war) {
-    doFirst {
-        copy {
-            from war
-            into "${project.buildDir}/docker"
         }
     }
 }
