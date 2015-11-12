@@ -61,3 +61,14 @@ Once the service is up and running, fire up Curl or your favorite REST browser (
       * GET to retrieve a list of all people
       * GET with /{personId} to retrieve info on a particular Person
    * [http://localhost:8080/hello-world/swagger](http://localhost:8080/hello-world/swagger) - display live swagger API documentation (use your regular ol' browser for this)
+
+## Continuous Integration Build
+This project builds automatically on [Travis CI](https://travis-ci.org/).  Build results are available here:
+
+   * [https://travis-ci.org/steasdal/hello-world](https://travis-ci.org/steasdal/hello-world)
+    
+## Docker Image
+Successful builds result in a fresh docker image pushed to the official Docker Hub:
+
+   * [https://hub.docker.com/r/steasdal/hello-world/](https://hub.docker.com/r/steasdal/hello-world/)
+   
