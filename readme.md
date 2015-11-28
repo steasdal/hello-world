@@ -34,14 +34,14 @@ Build a deployable war file:
     
 Build a Docker image for the deployable war file (based on the tomcat:8.0 image)
 
-    gradle buildDocker
+    docker build -t steasdal/hello-world .
     
 ## Running the service
 To run the service from gradle, simply execute the bootRun command:
 
     gradle bootRun
     
-To run the docker image (after executing the `buildDocker` target), run the following command:
+To run the docker image (after executing the `docker build` command above), run the following command:
     
     docker run -p 8080:8080 -d steasdal/hello-world
     
