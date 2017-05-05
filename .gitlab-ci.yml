@@ -1,0 +1,54 @@
+# Disable the Gradle daemon for Continuous Integration servers as correctness
+# is usually a priority over speed in CI environments. Using a fresh
+# runtime for each build is more reliable since the runtime is completely
+# isolated from any previous builds.
+variables:
+    GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+# Make the gradle wrapper executable. This essentially downloads a copy of
+# Gradle to build the project with.
+# https://docs.gradle.org/current/userguide/gradle_wrapper.html
+# It is expected that any modern gradle project has a wrapper
+before_script:
+  - chmod +x gradlew
+    
+after_script:
+  - docker rmi steasdal/hello-world
+
+stages:
+  - build
+  - test
+  - dockerize
+
+# Build the war file
+build:
+  stage: build
+  script:
+    - ./gradlew war
+  artifacts:
+    paths:
+      - build/libs/
+  tags:
+    - gradle
+  allow_failure: false
+
+# Run tests
+test:
+  stage: test
+  script:
+    - ./gradlew test
+  tags:
+    - gradle
+  
+# Build the war file into a tomcat docker image
+dockerize:
+  stage: dockerize
+  script:
+    - docker build -t steasdal/hello-world .
+  dependencies:
+    - build
+  tags: 
+    - docker
+    
+# This is normally where we'd push the docker image
+
